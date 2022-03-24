@@ -2,12 +2,16 @@ import React from "react";
 import { Button, Container, Content } from "./styles";
 import LogoImg from "../../assets/logo.svg";
 
-const Header = () => {
+interface HeaderProps {
+  openModal: () => void
+}
+
+const Header = ({openModal}:HeaderProps) => {
   return (
     <Container>
       <Content>
         <img src={LogoImg} alt="Go finances" />
-        <Button type="button">Nova transação</Button>
+        <Button type="button" onClick={openModal}>Nova transação</Button>
       </Content>
     </Container>
   );
