@@ -3,7 +3,7 @@
 </h1>
 
 <h6>
-Aplicação desenvolvida em React, que faz o cadastro de despesas/ganhos e listagem das finanças em uma dashboar.
+Aplicação desenvolvida em React, que faz o cadastro de despesas/ganhos e listagem das finanças em uma dashboard.
 </h6>
 
 ![](./src/assets/images/preview.png)
