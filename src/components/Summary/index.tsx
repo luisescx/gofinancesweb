@@ -2,8 +2,39 @@ import { Container, Card, CardHeader, Name, Value } from "./styles";
 import incomeImg from "../../assets/income.svg";
 import outcomeImg from "../../assets/outcome.svg";
 import totalImg from "../../assets/total.svg";
+import { useTransactions } from "../../hooks/useTransactions";
+import { useMemo } from "react";
+import { formatValueToCurrency } from "../../utils";
 
 export function Summary() {
+  const { transactions } = useTransactions();
+
+  const summary = useMemo(() => {
+    const values = transactions.reduce(
+      (acc, transaction) => {
+        if (transaction.type === "deposit") {
+          acc.deposits += transaction.amount;
+          acc.total += transaction.amount;
+        } else {
+          acc.withdraws += transaction.amount;
+          acc.total -= transaction.amount;
+        }
+
+        return acc;
+      },
+      { deposits: 0, withdraws: 0, total: 0 }
+    );
+
+    return {
+      deposits: formatValueToCurrency(values.deposits),
+      withdraws:
+        values.withdraws === 0
+          ? formatValueToCurrency(values.withdraws)
+          : `- ${formatValueToCurrency(values.withdraws)}`,
+      total: formatValueToCurrency(values.total),
+    };
+  }, [transactions]);
+
   return (
     <Container>
       <Card>
@@ -12,7 +43,7 @@ export function Summary() {
           <img src={incomeImg} alt="Entradas" />
         </CardHeader>
 
-        <Value>R$ 1000,00</Value>
+        <Value>{summary.deposits}</Value>
       </Card>
 
       <Card>
@@ -21,7 +52,7 @@ export function Summary() {
           <img src={outcomeImg} alt="Saídas" />
         </CardHeader>
 
-        <Value>- R$ 500,00</Value>
+        <Value>{summary.withdraws}</Value>
       </Card>
 
       <Card isTotal>
@@ -30,7 +61,7 @@ export function Summary() {
           <img src={totalImg} alt="Total" />
         </CardHeader>
 
-        <Value isTotal>R$ 1000,00</Value>
+        <Value isTotal>{summary.total}</Value>
       </Card>
     </Container>
   );
